@@ -7,12 +7,17 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Juego del Ahorcado</h1>
-    <canvas id="ahorcadoCanvas" width="200" height="200"></canvas>
-    <div id="palabraOculta"></div>
-    <div id="letrasErradas"></div>
-    <input type="text" id="inputLetra" maxlength="1">
-    <button onclick="adivinarLetra()">Adivinar</button>
+    <div class="container">
+        <h1>Juego del Ahorcado</h1>
+        <canvas id="ahorcadoCanvas" width="200" height="200"></canvas>
+        <div id="palabraOculta" class="palabra"></div>
+        <div id="letrasErradas" class="erradas"></div>
+        <div class="input-group">
+            <input type="text" id="inputLetra" maxlength="1" placeholder="Ingresa una letra">
+            <button onclick="adivinarLetra()">Adivinar</button>
+        </div>
+    </div>
     <script src="scripts.js"></script>
 </body>
 </html>
+
