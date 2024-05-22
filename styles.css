@@ -1,1 +1,21 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+}
 
+#ahorcadoCanvas {
+    border: 1px solid #000;
+    margin-bottom: 20px;
+}
+
+#inputLetra {
+    font-size: 20px;
+    text-align: center;
+    width: 30px;
+}
+
+button {
+    font-size: 20px;
+    padding: 5px 10px;
+}
