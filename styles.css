@@ -1,8 +1,10 @@
 /* General Styles */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #000000;
-    color: #333;
+    background: linear-gradient(rgb(0, 51, 255), rgb(0, 0, 0), rgb(255, 117, 4));
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #f4f3f3;
     margin: 0;
     padding: 0;
     display: flex;
@@ -13,10 +15,10 @@ body {
 
 /* Container */
 .container {
-    background-color: #fff;
+    background-color: #ffffff;
     border-radius: 50px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 100px;
+    padding: 80px;
     text-align: center;
     max-width: 400px;
     width: 100%;
@@ -26,14 +28,16 @@ body {
 h1 {
     font-size: 2em;
     color: #007BFF;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
 }
 
 /* Canvas */
 #ahorcadoCanvas {
-    border: 1px solid #ff7700;
     margin-bottom: 20px;
-    background-color: #e9ecef;
+    background-color: #6b6b6b;
+    border-radius: 10px;
+    max-width: 300px;
+    width: 100%;
 }
 
 /* Palabra Oculta */
@@ -58,6 +62,7 @@ h1 {
     margin-right: 10px;
     border: 2px solid #ff7700;
     border-radius: 10px;
+    text-transform: uppercase;
 }
 
 /* Button */
@@ -70,6 +75,7 @@ button {
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s;
+    text-transform: uppercase;
 }
 
 button:hover {
