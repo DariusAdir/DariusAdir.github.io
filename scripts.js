@@ -109,12 +109,11 @@ const addBodyPart = (bodyPart) => {
  *Code to guess a letter
 */
 function guessLetter(letter) {
-  if (selectedWord.includes(letter)) {
-      correctLetter(letter);
+  if (selectedWord.includes(letter.toUpperCase())) {
+    correctLetter(letter);
   } else {
-      wrongLetter();
+    wrongLetter(letter);
   }
-  usedLetters.push(letter);
 }
 
 /**
