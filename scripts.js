@@ -17,9 +17,6 @@ document.addEventListener('keydown', letterEvent);
 /**
  * Code to check the letter the player used
  */
-/**
- * Code to check the letter the player used
- */
 function letterEvent(event) {
   if (startButton.style.display === 'block') {
     return; // Don't accept input if the game is not started
@@ -196,15 +193,19 @@ function drawScore() {
 function drawWordContainer() {
   wordContainer.innerHTML = '';
   selectedWord.forEach((letter) => {
+    const letterContainer = document.createElement('div');
+    letterContainer.classList.add('letter-container');
+
     const letterElement = document.createElement('span');
-    letterElement.classList.add('hidden');
+    letterElement.classList.add('letter', 'hidden');
     letterElement.textContent = letter;
-    letterElement.style.position = 'relative';  // Enable relative positioning
 
-    // Add underline style
-    letterElement.style.borderBottom = '1px solid #ddd';  // Adjust underline style
+    const underlineElement = document.createElement('div');
+    underlineElement.classList.add('underline');
 
-    wordContainer.appendChild(letterElement);
+    letterContainer.appendChild(letterElement);
+    letterContainer.appendChild(underlineElement);
+    wordContainer.appendChild(letterContainer);
   });
 }
 
