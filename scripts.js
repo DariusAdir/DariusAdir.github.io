@@ -1,134 +1,150 @@
-const palabras = ['ahorrar', 'vibora', 'pertenencia', 'pasto', 'guirnalda', 'bostezo', 'cartulina'];
-let palabraSecreta;
-let letrasAcertadas = [];
-let letrasErroneas = [];
-let canvas = document.getElementById('ahorcadoCanvas');
-let contexto = canvas.getContext('2d');
-let intentosRestantes = 10;
-let mensaje = document.getElementById('mensaje');
+const wordContainer = document.getElementById('wordContainer');
+const startButton = document.getElementById('startButton');
+const usedLettersElement = document.getElementById('usedLetters');
 
-function iniciarJuego() {
-  palabraSecreta = palabras[Math.floor(Math.random() * palabras.length)].split('');
-  letrasAcertadas = [];
-  letrasErroneas = [];
-  intentosRestantes = 10;
-  dibujarCanvas();
-  actualizarPalabraOculta();
-  mensaje.textContent = '';
+let canvas = document.getElementById('canvas');
+let ctx = canvas.getContext('2d');
+ctx.canvas.width  = 0;
+ctx.canvas.height = 0;
+
+/*
+ * Represents an array of body parts.
+ */
+const bodyParts = [
+    [4,2,1,1],
+    [4,3,1,2],
+    [3,5,1,1],
+    [5,5,1,1],
+    [3,3,1,1],
+    [5,3,1,1]
+];
+
+let selectedWord;
+let usedLetters;
+let mistakes;
+let hits;
+
+/**
+ * Adds a letter to the usedLettersElement.
+ */
+const addLetter = letter => {
+    const letterElement = document.createElement('span');
+    letterElement.innerHTML = letter.toUpperCase();
+    usedLettersElement.appendChild(letterElement);
 }
 
-function actualizarPalabraOculta() {
-  let palabraVisible = '';
-  for (let letra of palabraSecreta) {
-    if (letrasAcertadas.includes(letra)) {
-      palabraVisible += letra;
-    } else {
-      palabraVisible += '_ ';
+/**
+ * Adds a body part to the canvas.
+ */
+const addBodyPart = bodyPart => {
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(...bodyPart);
+};
+
+/**
+ * Use addBodyPart by mistakes.
+ */
+const wrongLetter = () => {
+    addBodyPart(bodyParts[mistakes]);
+    mistakes++;
+    if(mistakes === bodyParts.length) endGame();
+}
+
+/**
+ * Ends the game.
+ */
+const endGame = () => {
+    document.removeEventListener('keydown', letterEvent);
+    startButton.style.display = 'block';
+}
+
+/**
+ * Checks if the letter is correct.
+ */
+const correctLetter = letter => {
+    const { children } =  wordContainer;
+    for(let i = 0; i < children.length; i++) {
+        if(children[i].innerHTML === letter) {
+            children[i].classList.toggle('hidden');
+            hits++;
+        }
     }
-  }
-  document.getElementById('palabraOculta').innerHTML = palabraVisible;
+    if(hits === selectedWord.length) endGame();
 }
 
-function dibujarCanvas() {
-  contexto.clearRect(0, 0, canvas.width, canvas.height);
-  // Dibujar horca en base a los intentos restantes
-  switch (intentosRestantes) {
-    case 10:
-      dibujarBase();
-      break;
-    case 9:
-      dibujarPoste();
-      break;
-    case 8:
-      dibujarTravesaño();
-      break;
-    case 7:
-      dibujarCuerda();
-      break;
-    case 6:
-      dibujarCabeza();
-      break;
-    case 5:
-      dibujarCuerpo();
-      break;
-    case 4:
-      dibujarBrazoIzquierdo();
-      break;
-    case 3:
-      dibujarBrazoDerecho();
-      break;
-    case 2:
-      dibujarPiernaIzquierda();
-      break;
-    case 1:
-      dibujarPiernaDerecha();
-      break;
-    case 0:
-      dibujarMonigoteCompleto();
-      mostrarMensaje('¡Has perdido! La palabra era: ' + palabraSecreta);
-      break;
-  }
-}
+/**
+ * Choose the letter theme.
+ */
+const letterInput = letter => {
+    if(selectedWord.includes(letter)) {
+        correctLetter(letter);
+    } else {
+        wrongLetter();
+    }
+    addLetter(letter);
+    usedLetters.push(letter);
+};
 
-function dibujarBase() {
-  contexto.beginPath();
-  contexto.moveTo(20, 180);
-  contexto.lineTo(100, 180);
-  contexto.stroke();
-}
+/**
+ * Event for the letter.
+ */
+const letterEvent = event => {
+    let newLetter = event.key.toUpperCase();
+    if(newLetter.match(/^[a-zñ]$/i) && !usedLetters.includes(newLetter)) {
+        letterInput(newLetter);
+    };
+};
 
-function dibujarPoste() {
-  contexto.beginPath();
-  contexto.moveTo(50, 10);
-  contexto.lineTo(50, 180);
-  contexto.stroke();
-}
+/**
+ * Draw the word by adding letters.
+ */
+const drawWord = () => {
+    selectedWord.forEach(letter => {
+        const letterElement = document.createElement('span');
+        letterElement.innerHTML = letter.toUpperCase();
+        letterElement.classList.add('letter');
+        letterElement.classList.add('hidden');
+        wordContainer.appendChild(letterElement);
+    });
+};
 
-function dibujarTravesaño() {
-  contexto.beginPath();
-  contexto.moveTo(10, 20);
-  contexto.lineTo(90, 20);
-  contexto.stroke();
-}
+/**
+ * Select a random word.
+ */
+const selectRandomWord = () => {
+    let word = words[Math.floor((Math.random() * words.length))].toUpperCase();
+    selectedWord = word.split('');
+};
 
-function dibujarCuerda() {
-  contexto.beginPath();
-  contexto.moveTo(50, 20);
-  contexto.lineTo(50, 40);
-  contexto.stroke();
-}
+/**
+ * Draw the stick from which it hangs.
+ */
+const drawStick = () => {
+    ctx.canvas.width  = 120;
+    ctx.canvas.height = 160;
+    ctx.scale(20, 20);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#d95d39';
+    ctx.fillRect(0, 7, 4, 1);
+    ctx.fillRect(1, 0, 1, 8);
+    ctx.fillRect(2, 0, 3, 1);
+    ctx.fillRect(4, 1, 1, 1);
+};
 
-function dibujarCabeza() {
-  contexto.beginPath();
-  contexto.arc(50, 60, 20, 0, Math.PI * 2);
-  contexto.stroke();
-}
+/**
+ * Start the game.
+ */
+const startGame = () => {
+    usedLetters = [];
+    mistakes = 0;
+    hits = 0;
+    wordContainer.innerHTML = '';
+    usedLettersElement.innerHTML = '';
+    startButton.style.display = 'none';
+    drawStick();
+    selectRandomWord();
+    drawWord();
+    document.addEventListener('keydown', letterEvent);
+};
 
-function dibujarCuerpo() {
-  contexto.beginPath();
-  contexto.moveTo(50, 80);
-  contexto.lineTo(50, 140);
-  contexto.stroke();
-}
-
-function dibujarBrazoIzquierdo() {
-  contexto.beginPath();
-  contexto.moveTo(50, 100);
-  contexto.lineTo(35, 120);
-  contexto.stroke();
-}
-
-function dibujarPiernaIzquierda() {
-    contexto.beginPath();
-    contexto.moveTo(50, 140);
-    contexto.lineTo(40, 160);
-    contexto.stroke();
-}
-  
-function dibujarPiernaDerecha() {
-    contexto.beginPath();
-    contexto.moveTo(50, 140);
-    contexto.lineTo(60, 160);
-    contexto.stroke();
-}
-  
+startButton.addEventListener('click', startGame);
