@@ -1,109 +1,50 @@
-/* General Styles */
+.hidden {
+    color: transparent;
+}
+
 body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(rgb(0, 51, 255), rgb(0, 0, 0), rgb(255, 117, 4));
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    color: #f4f3f3;
-    margin: 0;
-    padding: 0;
+    background: #2e2d2d;
+    color: #fff;
+    font-family: 'SF Pixelate', sans-serif;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 700px;
 }
 
-/* Container */
-.container {
-    background-color: #ffffff;
-    border-radius: 50px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 80px;
+#wordContainer {
+    margin-top: 20px;
+}
+
+.letter {
+    margin: 0 7px;
+    position: relative;
     text-align: center;
-    max-width: 400px;
+}
+
+.letter::after{
+    content: ' ';
+    display: block;
+    position: absolute;
+    left: 0;
     width: 100%;
+    height: 1px;
+    background-color: #fff;
+    min-width: 10px;
 }
 
-/* Heading */
-h1 {
-    font-size: 2em;
-    color: #007BFF;
-    margin-bottom: 50px;
-}
-
-/* Canvas */
-#ahorcadoCanvas {
-    margin-bottom: 20px;
-    background-color: #6b6b6b;
-    border-radius: 10px;
-    max-width: 300px;
-    width: 100%;
-}
-
-/* Palabra Oculta */
-.palabra {
-    font-size: 1.5em;
-    margin-bottom: 20px;
-    letter-spacing: 2px;
-}
-
-/* Letras Erradas */
-.erradas {
-    color: red;
-    margin-bottom: 20px;
-}
-
-/* Input Letra */
-#inputLetra {
-    font-size: 1.2em;
-    padding: 5px;
-    width: 200px;
-    text-align: center;
-    margin-right: 10px;
-    border: 2px solid #ff7700;
-    border-radius: 10px;
-    text-transform: uppercase;
-}
-
-/* Button */
-button {
-    font-size: 1.2em;
-    padding: 5px 15px;
+#startButton {
+    margin-top: 70px;
+    appearance: none;
+    font-family: 'SF Pixelate', sans-serif;
     border: none;
-    background-color: #007BFF;
+    width: 150px;
+    padding: 10px;
+    background: #d95d39;
     color: #fff;
-    border-radius: 10px;
+    font-weight: 200;
+    font-size: 20px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
-    text-transform: uppercase;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-/* Responsive Styles */
-@media (max-width: 600px) {
-    .container {
-        padding: 15px;
-        max-width: 100%;
-    }
-
-    h1 {
-        font-size: 1.5em;
-    }
-
-    .palabra {
-        font-size: 1.2em;
-    }
-
-    #inputLetra {
-        width: 40px;
-        font-size: 1em;
-    }
-
-    button {
-        font-size: 1em;
-        padding: 5px 10px;
-    }
 }
