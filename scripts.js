@@ -14,21 +14,28 @@ let score = 0;
 
 document.addEventListener('keydown', letterEvent);
 
-/**  
-  * Code to check the letter the player used
-  */
+/**
+ * Code to check the letter the player used
+ */
+/**
+ * Code to check the letter the player used
+ */
 function letterEvent(event) {
   if (startButton.style.display === 'block') {
-      return; // Don't accept input if the game is not started
+    return; // Don't accept input if the game is not started
   }
 
   const pressedKey = event.key.toLowerCase();
-  if (pressedKey.match(/[a-z]/)) {
-      if (!usedLetters.includes(pressedKey)) {
-          guessLetter(pressedKey);
-      }
+  if (pressedKey.match(/^[a-z]$/)) {
+    if (!usedLetters.includes(pressedKey)) {
+      guessLetter(pressedKey);
+    }
+  } else {
+    // Ignore non-letter input, shift, and accented characters
+    return;
   }
 }
+
 
 /**  
   * Code to enable a reset button
@@ -144,28 +151,35 @@ const correctLetter = (letter) => {
 /**
  * Use addBodyPart based on mistakes.
  */
-const wrongLetter = () => {
-    addBodyPart(bodyParts[mistakes]);
-    mistakes++;
-    if (mistakes === bodyParts.length) {
-        endGame();
-    }
+const wrongLetter = (letter) => {
+  addBodyPart(bodyParts[mistakes]);
+  mistakes++;
+  if (!usedLetters.includes(letter.toUpperCase())) {
+      usedLetters.push(letter.toUpperCase());
+      addLetter(letter.toUpperCase());
+  }
+  if (mistakes === bodyParts.length) {
+      endGame();
+  }
 };
-
+  
 /**
  * Ends the game.
  */
 const endGame = () => {
   document.removeEventListener('keydown', letterEvent);
   startButton.style.display = 'block';
+  let message;
   if (mistakes === bodyParts.length) {
-      alert("You lost! The word was: " + selectedWord.join(''));
+    message = "You lost! The word was: " + selectedWord.join('');
   } else {
-      alert("Congratulations! You guessed the word and earned " + score + " points!");
+    message = `Congratulations! You guessed the word "${selectedWord.join('')}" and earned ${score} points!`;
   }
+  alert(message);
 
   resetGame(); // Call the resetGame function
 };
+
 
 /**
  * Shows the score on the canvas.
@@ -182,10 +196,15 @@ function drawScore() {
 function drawWordContainer() {
   wordContainer.innerHTML = '';
   selectedWord.forEach((letter) => {
-      const letterElement = document.createElement('span');
-      letterElement.classList.add('hidden');
-      letterElement.textContent = letter;
-      wordContainer.appendChild(letterElement);
+    const letterElement = document.createElement('span');
+    letterElement.classList.add('hidden');
+    letterElement.textContent = letter;
+    letterElement.style.position = 'relative';  // Enable relative positioning
+
+    // Add underline style
+    letterElement.style.borderBottom = '1px solid #ddd';  // Adjust underline style
+
+    wordContainer.appendChild(letterElement);
   });
 }
 
