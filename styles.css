@@ -17,6 +17,13 @@ body {
   margin-top: 20px;
 }
 
+.underline {
+  border-bottom: 2px solid #ffffff;  /* Thick black underline */
+  margin-right: 5px;
+  display: inline-block;
+  height: 5px;  /* Adjust height to create a visible underline */
+}
+
 .letter {
   margin: 0 7px;
   position: relative;
