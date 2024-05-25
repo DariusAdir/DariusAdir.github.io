@@ -18,10 +18,10 @@ body {
 }
 
 .underline {
-  border-bottom: 2px solid #ffffff;  /* Thick black underline */
+  border-bottom: 2px solid #ffffff; 
   margin-right: 5px;
   display: inline-block;
-  height: 5px;  /* Adjust height to create a visible underline */
+  height: 5px;  
 }
 
 .letter {
