@@ -1,113 +1,194 @@
 const wordContainer = document.getElementById('wordContainer');
 const startButton = document.getElementById('startButton');
 const usedLettersElement = document.getElementById('usedLetters');
-const words = ['Carne','Martillo', 'Lavadora','Sucio','Cangrejo','Lento','Alimentos','Delgado','Cubo','Comida','Caracol','Abajo','Alumno','Bonito','Cesta','Sol','Beber','Botella','Hamburguesa','Invierno'];
+const words = ['Carne', 'Martillo', 'Lavadora', 'Sucio', 'Cangrejo', 'Lento', 'Alimentos', 'Delgado', 'Cubo', 'Comida', 
+               'Caracol', 'Abajo', 'Alumno', 'Bonito', 'Cesta', 'Sol', 'Beber', 'Botella', 'Hamburguesa', 'Invierno'];
 
 let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
-ctx.canvas.width  = 0;
-ctx.canvas.height = 0;
 
-/*
- * Represents an array of body parts.
- */
+/**
+  * Representation of points 
+  */
+let score = 0;
+
+document.addEventListener('keydown', letterEvent);
+
+/**  
+  * Code to check the letter the player used
+  */
+function letterEvent(event) {
+  if (startButton.style.display === 'block') {
+      return; // Don't accept input if the game is not started
+  }
+
+  const pressedKey = event.key.toLowerCase();
+  if (pressedKey.match(/[a-z]/)) {
+      if (!usedLetters.includes(pressedKey)) {
+          guessLetter(pressedKey);
+      }
+  }
+}
+
+/**  
+  * Code to enable a reset button
+  */
+const resetButton = document.getElementById('resetButton');
+resetButton.addEventListener('click', resetGame);
+
+/**
+  * Start button
+  */
+startButton.addEventListener('click', startGame);
+function startGame() {
+  startButton.style.display = 'none';
+  selectRandomWord();
+  drawStick();
+  drawWordContainer();
+  document.addEventListener('keydown', letterEvent);
+}
+
+/**  
+  * Reset button
+  */
+function resetGame() {
+  // Reset game variables
+  selectedWord = [];
+  usedLetters = [];
+  mistakes = 0;
+  hits = 0;
+  score = 0;
+
+  // Clear the canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Reset the UI
+  wordContainer.innerHTML = '';
+  usedLettersElement.innerHTML = '';
+  startButton.style.display = 'block';
+
+  // Redraw the hangman structure
+  drawStick();
+}
+
+/** 
+  * Represents an array of body parts.
+  */
 const bodyParts = [
-    [4,2,1,1],
-    [4,3,1,2],
-    [3,5,1,1],
-    [5,5,1,1],
-    [3,3,1,1],
-    [5,3,1,1]
+    [4, 2, 1, 1],
+    [4, 3, 1, 2],
+    [3, 5, 1, 1],
+    [5, 5, 1, 1],
+    [3, 3, 1, 1],
+    [5, 3, 1, 1]
 ];
 
 let selectedWord;
-let usedLetters;
-let mistakes;
-let hits;
+let usedLetters = [];
+let mistakes = 0;
+let hits = 0;
 
 /**
  * Adds a letter to the usedLettersElement.
  */
-const addLetter = letter => {
+const addLetter = (letter) => {
     const letterElement = document.createElement('span');
     letterElement.innerHTML = letter.toUpperCase();
     usedLettersElement.appendChild(letterElement);
-}
+};
 
 /**
  * Adds a body part to the canvas.
  */
-const addBodyPart = bodyPart => {
+const addBodyPart = (bodyPart) => {
     ctx.fillStyle = '#fff';
     ctx.fillRect(...bodyPart);
 };
 
-/**
- * Use addBodyPart by mistakes.
- */
-const wrongLetter = () => {
-    addBodyPart(bodyParts[mistakes]);
-    mistakes++;
-    if(mistakes === bodyParts.length) endGame();
-}
-
-/**
- * Ends the game.
- */
-const endGame = () => {
-    document.removeEventListener('keydown', letterEvent);
-    startButton.style.display = 'block';
+/** 
+ *Code to guess a letter
+*/
+function guessLetter(letter) {
+  if (selectedWord.includes(letter)) {
+      correctLetter(letter);
+  } else {
+      wrongLetter();
+  }
+  usedLetters.push(letter);
 }
 
 /**
  * Checks if the letter is correct.
  */
-const correctLetter = letter => {
-    const { children } =  wordContainer;
-    for(let i = 0; i < children.length; i++) {
-        if(children[i].innerHTML === letter) {
-            children[i].classList.toggle('hidden');
-            hits++;
-        }
+const correctLetter = (letter) => {
+  let foundMatch = false;
+  const { children } = wordContainer;
+  for (let i = 0; i < children.length; i++) {
+      if (children[i].innerHTML.toLowerCase() === letter) {
+          children[i].classList.remove('hidden');
+          foundMatch = true;
+          hits++;
+          score++; // Update score on correct letter guess
+      }
+  }
+  if (foundMatch && !usedLetters.includes(letter)) {
+      usedLetters.push(letter); // Add letter to usedLetters only if not already used
+      addLetter(letter);
+  }
+  drawScore(); // Update score display on canvas
+  if (hits === selectedWord.length) {
+      endGame();
+      alert("Congratulations! You guessed the word and earned " + score + " points!"); // Display earned points
+  }
+};
+
+/**
+ * Use addBodyPart based on mistakes.
+ */
+const wrongLetter = () => {
+    addBodyPart(bodyParts[mistakes]);
+    mistakes++;
+    if (mistakes === bodyParts.length) {
+        endGame();
     }
-    if(hits === selectedWord.length) endGame();
+};
+
+/**
+ * Ends the game.
+ */
+const endGame = () => {
+  document.removeEventListener('keydown', letterEvent);
+  startButton.style.display = 'block';
+  if (mistakes === bodyParts.length) {
+      alert("You lost! The word was: " + selectedWord.join(''));
+  } else {
+      alert("Congratulations! You guessed the word and earned " + score + " points!");
+  }
+
+  resetGame(); // Call the resetGame function
+};
+
+/**
+ * Shows the score on the canvas.
+ */
+function drawScore() {
+    ctx.font = "15px SF Pixelate";
+    ctx.fillStyle = "#d95d39"; // Set fill style for score text
+    ctx.fillText("Score: " + score, 10, 20);
 }
 
 /**
- * Choose the letter theme.
+ * Shows the container of the word to guess.
  */
-const letterInput = letter => {
-    if(selectedWord.includes(letter)) {
-        correctLetter(letter);
-    } else {
-        wrongLetter();
-    }
-    addLetter(letter);
-    usedLetters.push(letter);
-};
-
-/**
- * Event for the letter.
- */
-const letterEvent = event => {
-    let newLetter = event.key.toUpperCase();
-    if(newLetter.match(/^[a-zñ]$/i) && !usedLetters.includes(newLetter)) {
-        letterInput(newLetter);
-    };
-};
-
-/**
- * Draw the word by adding letters.
- */
-const drawWord = () => {
-    selectedWord.forEach(letter => {
-        const letterElement = document.createElement('span');
-        letterElement.innerHTML = letter.toUpperCase();
-        letterElement.classList.add('letter');
-        letterElement.classList.add('hidden');
-        wordContainer.appendChild(letterElement);
-    });
-};
+function drawWordContainer() {
+  wordContainer.innerHTML = '';
+  selectedWord.forEach((letter) => {
+      const letterElement = document.createElement('span');
+      letterElement.classList.add('hidden');
+      letterElement.textContent = letter;
+      wordContainer.appendChild(letterElement);
+  });
+}
 
 /**
  * Select a random word.
@@ -121,31 +202,13 @@ const selectRandomWord = () => {
  * Draw the stick from which it hangs.
  */
 const drawStick = () => {
-    ctx.canvas.width  = 120;
-    ctx.canvas.height = 160;
-    ctx.scale(20, 20);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#d95d39';
-    ctx.fillRect(0, 7, 4, 1);
-    ctx.fillRect(1, 0, 1, 8);
-    ctx.fillRect(2, 0, 3, 1);
-    ctx.fillRect(4, 1, 1, 1);
+  ctx.canvas.width = 120;
+  ctx.canvas.height = 160;
+  ctx.scale(20, 20);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#d95d39';
+  ctx.fillRect(0, 7, 4, 1); // Top horizontal line
+  ctx.fillRect(1, 0, 1, 8); // Vertical line
+  ctx.fillRect(2, 0, 3, 1); // Top horizontal bar
+  ctx.fillRect(4, 1, 1, 1); // Small notch on top right
 };
-
-/**
- * Start the game.
- */
-const startGame = () => {
-    usedLetters = [];
-    mistakes = 0;
-    hits = 0;
-    wordContainer.innerHTML = '';
-    usedLettersElement.innerHTML = '';
-    startButton.style.display = 'none';
-    drawStick();
-    selectRandomWord();
-    drawWord();
-    document.addEventListener('keydown', letterEvent);
-};
-
-startButton.addEventListener('click', startGame);
