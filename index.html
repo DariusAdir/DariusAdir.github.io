@@ -1,23 +1,29 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego del Ahorcado</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>HangMan</title>
+    <link href="http://fonts.cdnfonts.com/css/sf-pixelate" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" >
+    <script type="text/javascript" src="words.js" defer></script>
+    <script type="text/javascript" src="script.js" defer></script>
 </head>
-<body>
-    <div class="container">
-        <h1>Juego del Ahorcado</h1>
-        <canvas id="ahorcadoCanvas" width="200" height="200"></canvas>
-        <div id="palabraOculta" class="palabra"></div>
-        <div id="letrasErradas" class="erradas"></div>
-        <div class="input-group">
-            <input type="text" id="inputLetra" maxlength="1" placeholder="Ingresa una letra">
-            <button onclick="adivinarLetra()">Adivinar</button>
-        </div>
-    </div>
-    <script src="scripts.js"></script>
-</body>
-</html>
 
+<body>
+    <h1>HangMan</h1>
+    <div>
+        <canvas id="canvas"></canvas>
+        <div id="usedLetters"></div>
+    </div>
+    <div id="usedLetters"></div>
+    <div id="wordContainer"></div>
+    <button id="startButton">START</button>
+</body>
+
+<p>
+    Made by: Victor Pointud & Dario Fernandez
+</p>
+
+</html>
