@@ -1,6 +1,7 @@
 const wordContainer = document.getElementById('wordContainer');
 const startButton = document.getElementById('startButton');
 const usedLettersElement = document.getElementById('usedLetters');
+const words = ['Carne','Martillo', 'Lavadora','Sucio','Cangrejo','Lento','Alimentos','Delgado','Cubo','Comida','Caracol','Abajo','Alumno','Bonito','Cesta','Sol','Beber','Botella','Hamburguesa','Invierno'];
 
 let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
