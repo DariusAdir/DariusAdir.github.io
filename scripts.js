@@ -1,8 +1,10 @@
 const wordContainer = document.getElementById('wordContainer');
 const startButton = document.getElementById('startButton');
 const usedLettersElement = document.getElementById('usedLetters');
-const words = ['Carne', 'Martillo', 'Lavadora', 'Sucio', 'Cangrejo', 'Lento', 'Alimentos', 'Delgado', 'Cubo', 'Comida', 
-               'Caracol', 'Abajo', 'Alumno', 'Bonito', 'Cesta', 'Sol', 'Beber', 'Botella', 'Hamburguesa', 'Invierno'];
+const words = ['Meat', 'Hammer', 'Washing machine', 'Dirty', 'Crab', 
+               'Slow', 'Food', 'Thin', 'Bucket', 'Meal', 'Snail', 
+               'Down', 'Student', 'Pretty', 'Basket', 'Sun', 
+               'Drink', 'Bottle', 'Hamburger', 'Winter'];
 
 let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
