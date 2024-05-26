@@ -127,21 +127,22 @@ const correctLetter = (letter) => {
   let foundMatch = false;
   const { children } = wordContainer;
   for (let i = 0; i < children.length; i++) {
-      if (children[i].innerHTML.toLowerCase() === letter) {
-          children[i].classList.remove('hidden');
-          foundMatch = true;
-          hits++;
-          score++; // Update score on correct letter guess
-      }
+    const letterElement = children[i].querySelector('.letter');
+    if (letterElement.textContent.toLowerCase() === letter.toLowerCase()) {
+      letterElement.classList.remove('hidden');
+      foundMatch = true;
+      hits++;
+      score++; // Update score on correct letter guess
+    }
   }
   if (foundMatch && !usedLetters.includes(letter)) {
-      usedLetters.push(letter); // Add letter to usedLetters only if not already used
-      addLetter(letter);
+    usedLetters.push(letter); // Add letter to usedLetters only if not already used
+    addLetter(letter);
   }
   drawScore(); // Update score display on canvas
   if (hits === selectedWord.length) {
-      endGame();
-      alert("Congratulations! You guessed the word and earned " + score + " points!"); // Display earned points
+    endGame();
+    alert("Congratulations! You guessed the word and earned " + score + " points!"); // Display earned points
   }
 };
 
