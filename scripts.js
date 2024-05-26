@@ -21,7 +21,7 @@ document.addEventListener('keydown', letterEvent);
  */
 function letterEvent(event) {
   if (startButton.style.display === 'block') {
-    return; // Don't accept input if the game is not started
+    return; 
   }
 
   const pressedKey = event.key.toLowerCase();
@@ -30,7 +30,6 @@ function letterEvent(event) {
       guessLetter(pressedKey);
     }
   } else {
-    // Ignore non-letter input, shift, and accented characters
     return;
   }
 }
@@ -43,7 +42,7 @@ const resetButton = document.getElementById('resetButton');
 resetButton.addEventListener('click', resetGame);
 
 /**
-  * Start button
+  * Initialize the game
   */
 startButton.addEventListener('click', startGame);
 function startGame() {
@@ -55,25 +54,18 @@ function startGame() {
 }
 
 /**  
-  * Reset button
+  * Reset the game
   */
 function resetGame() {
-  // Reset game variables
   selectedWord = [];
   usedLetters = [];
   mistakes = 0;
   hits = 0;
   score = 0;
-
-  // Clear the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Reset the UI
   wordContainer.innerHTML = '';
   usedLettersElement.innerHTML = '';
   startButton.style.display = 'block';
-
-  // Redraw the hangman structure
   drawStick();
 }
 
@@ -134,17 +126,17 @@ const correctLetter = (letter) => {
       letterElement.classList.remove('hidden');
       foundMatch = true;
       hits++;
-      score++; // Update score on correct letter guess
+      score++;
     }
   }
   if (foundMatch && !usedLetters.includes(letter)) {
-    usedLetters.push(letter); // Add letter to usedLetters only if not already used
+    usedLetters.push(letter);
     addLetter(letter);
   }
-  drawScore(); // Update score display on canvas
+  drawScore();
   if (hits === selectedWord.length) {
     endGame();
-    alert("Congratulations! You guessed the word and earned " + score + " points!"); // Display earned points
+    alert("Congratulations! You guessed the word and earned " + score + " points!");
   }
 };
 
@@ -177,7 +169,7 @@ const endGame = () => {
   }
   alert(message);
 
-  resetGame(); // Call the resetGame function
+  resetGame();
 };
 
 
@@ -186,7 +178,7 @@ const endGame = () => {
  */
 function drawScore() {
     ctx.font = "15px SF Pixelate";
-    ctx.fillStyle = "#d95d39"; // Set fill style for score text
+    ctx.fillStyle = "#d95d39";
     ctx.fillText("Score: " + score, 10, 20);
 }
 
@@ -229,8 +221,8 @@ const drawStick = () => {
   ctx.scale(20, 20);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = '#d95d39';
-  ctx.fillRect(0, 7, 4, 1); // Top horizontal line
-  ctx.fillRect(1, 0, 1, 8); // Vertical line
-  ctx.fillRect(2, 0, 3, 1); // Top horizontal bar
-  ctx.fillRect(4, 1, 1, 1); // Small notch on top right
+  ctx.fillRect(0, 7, 4, 1); 
+  ctx.fillRect(1, 0, 1, 8); 
+  ctx.fillRect(2, 0, 3, 1); 
+  ctx.fillRect(4, 1, 1, 1); 
 };
